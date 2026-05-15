@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Art of the Garnish - Cocktail Trivia</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #1a1a1a;
+      background: #f5f5f5;
+      padding: 1rem;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      body { background: #1a1a1a; color: #f5f5f5; }
+    }
+    
+    .quiz-container {
+      max-width: 680px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      padding: 2rem 1.5rem;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .quiz-container { background: #2a2a2a; }
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #d4af37;
+      padding-bottom: 1.5rem;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+      color: #666;
+      letter-spacing: 1px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .header-subtitle { color: #aaa; }
+    }
+    
+    .toggle-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .toggle-btn {
+      padding: 8px 20px;
+      border: 1px solid #d4af37;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+      letter-spacing: 1px;
+    }
+    
+    .toggle-btn.active {
+      background: #d4af37;
+      color: #1a1a1a;
+    }
+    
+    .toggle-btn:hover {
+      border-color: #d4af37;
+    }
+    
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    
+    .name-entry {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      border: 1px solid #d4af37;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .name-entry { background: #333; }
+    }
+    
+    .name-entry label {
+      display: block;
+      font-size: 13px;
+      color: #666;
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .name-entry label { color: #aaa; }
+    }
+    
+    .name-entry input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      background: white;
+      color: #1a1a1a;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .name-entry input { 
+        background: #1a1a1a; 
+        color: #f5f5f5;
+        border-color: #444;
+      }
+    }
+    
+    .question {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .question { border-bottom-color: #333; }
+    }
+    
+    .question:last-of-type {
+      border-bottom: none;
+    }
+    
+    .question-number {
+      font-size: 12px;
+      color: #d4af37;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .question-text {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    
+    .question-type {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-left: 1rem;
+    }
+    
+    .option {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      cursor: pointer;
+      gap: 8px;
+    }
+    
+    .option input[type="radio"] {
+      cursor: pointer;
+    }
+    
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 2rem;
+      border: 1px solid #d4af37;
+      background: #d4af37;
+      color: #1a1a1a;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    
+    .submit-btn:hover {
+      opacity: 0.9;
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .success-message {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 2rem;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .success-message {
+        background: #1b5e20;
+        color: #81c784;
+      }
+    }
+    
+    .leaderboard {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .leaderboard-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #d4af37;
+      padding: 12px;
+      border-bottom: 2px solid #d4af37;
+    }
+    
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .leaderboard-row { background: #333; }
+    }
+    
+    .leaderboard-row:hover {
+      border: 1px solid #d4af37;
+    }
+    
+    .leaderboard-name {
+      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .leaderboard-score {
+      text-align: right;
+      font-size: 14px;
+    }
+    
+    .leaderboard-percent {
+      text-align: right;
+      font-size: 14px;
+      color: #999;
+    }
+    
+    .no-responses {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+      font-size: 14px;
+    }
+    
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    .modal {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .modal { 
+        background: #2a2a2a;
+        border-color: #444;
+      }
+    }
+    
+    .modal-close {
+      float: right;
+      font-size: 20px;
+      cursor: pointer;
+      color: #999;
+    }
+    
+    .modal-title {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      clear: both;
+    }
+    
+    .modal-question {
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-q-number {
+      font-size: 12px;
+      color: #d4af37;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .modal-q-text {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    
+    .modal-answer {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 0.25rem;
+    }
+    
+    .modal-answer.correct {
+      color: #2e7d32;
+      font-weight: 500;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .modal-answer.correct { color: #81c784; }
+    }
+    
+    .modal-answer.incorrect {
+      color: #c62828;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .modal-answer.incorrect { color: #ef5350; }
+    }
+    
+    .decoration {
+      text-align: center;
+      font-size: 20px;
+      margin: 2rem 0 1rem;
+      letter-spacing: 8px;
+      color: #d4af37;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <div class="header">
+    <h1>THE ART OF THE GARNISH</h1>
+    <p class="header-subtitle">COCKTAIL CLUB TRIVIA NIGHT</p>
+  </div>
+  
+  <div class="toggle-buttons">
+    <button class="toggle-btn active" onclick="switchMode('quiz')">QUIZ</button>
+    <button class="toggle-btn" onclick="switchMode('results')">RESULTS (HOST)</button>
+  </div>
+  
+  <div id="quiz" class="content-section active">
+    <div class="decoration">✦ ✦ ✦</div>
+    
+    <div class="name-entry">
+      <label for="playerName">Enter your name:</label>
+      <input type="text" id="playerName" placeholder="Your name">
+    </div>
+
+    <form id="quizForm">
+      <div class="question">
+        <div class="question-number">QUESTION 01</div>
+        <div class="question-text">The original maraschino cherry comes from the marasca cherry, which is native to:</div>
+        <div class="question-type">Multiple Choice</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q1" value="A" required> <span>Croatia</span></label>
+          <label class="option"><input type="radio" name="q1" value="B"> <span>Italy</span></label>
+          <label class="option"><input type="radio" name="q1" value="C"> <span>Spain</span></label>
+          <label class="option"><input type="radio" name="q1" value="D"> <span>Greece</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 02</div>
+        <div class="question-text">In 1943, Allied bombing destroyed a maraschino cherry facility in Zara (now Zadar). Which family lost their business?</div>
+        <div class="question-type">Multiple Choice</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q2" value="A" required> <span>Luxardo</span></label>
+          <label class="option"><input type="radio" name="q2" value="B"> <span>Martini</span></label>
+          <label class="option"><input type="radio" name="q2" value="C"> <span>Godiva</span></label>
+          <label class="option"><input type="radio" name="q2" value="D"> <span>Bacci</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 03</div>
+        <div class="question-text">Hawaiian bartender Harry K. Yee invented a cocktail called the Tropical Itch in 1957 that came with an unusual garnish. What was it?</div>
+        <div class="question-type">Multiple Choice</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q3" value="A" required> <span>A Chinese back-scratcher</span></label>
+          <label class="option"><input type="radio" name="q3" value="B"> <span>A tiny umbrella</span></label>
+          <label class="option"><input type="radio" name="q3" value="C"> <span>A orchid flower</span></label>
+          <label class="option"><input type="radio" name="q3" value="D"> <span>A sugar cane stick</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 04</div>
+        <div class="question-text">The origin of the salted rim on a Margarita is:</div>
+        <div class="question-type">Multiple Choice</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q4" value="A" required> <span>Completely unknown—nobody knows for sure</span></label>
+          <label class="option"><input type="radio" name="q4" value="B"> <span>Documented in a 1920s Mexican bartending manual</span></label>
+          <label class="option"><input type="radio" name="q4" value="C"> <span>Invented by the Margarita herself</span></label>
+          <label class="option"><input type="radio" name="q4" value="D"> <span>A recent invention from the 1980s</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 05</div>
+        <div class="question-text">Which garnish did bartenders originally put in a Martini before olives took over?</div>
+        <div class="question-type">Multiple Choice</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q5" value="A" required> <span>Cherries</span></label>
+          <label class="option"><input type="radio" name="q5" value="B"> <span>Lemon peels</span></label>
+          <label class="option"><input type="radio" name="q5" value="C"> <span>Onions</span></label>
+          <label class="option"><input type="radio" name="q5" value="D"> <span>Cocktail umbrellas</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 06</div>
+        <div class="question-text">FDR's favorite Dirty Martini was made with what ratio of gin to vermouth?</div>
+        <div class="question-type">Multiple Choice</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q6" value="A" required> <span>2:1</span></label>
+          <label class="option"><input type="radio" name="q6" value="B"> <span>3:1</span></label>
+          <label class="option"><input type="radio" name="q6" value="C"> <span>1:1</span></label>
+          <label class="option"><input type="radio" name="q6" value="D"> <span>4:1</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 07</div>
+        <div class="question-text">Novelist Sherwood Anderson died in 1941 from swallowing a cocktail pick while drinking a Martini. True or false?</div>
+        <div class="question-type">True or False</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q7" value="A" required> <span>True</span></label>
+          <label class="option"><input type="radio" name="q7" value="B"> <span>False</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 08</div>
+        <div class="question-text">The Gibson cocktail (Martini with a pickled onion) has a well-documented, universally agreed-upon origin story.</div>
+        <div class="question-type">True or False</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q8" value="A" required> <span>False—nobody agrees on where it came from</span></label>
+          <label class="option"><input type="radio" name="q8" value="B"> <span>True—the Gibson Girl illustrator invented it</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 09</div>
+        <div class="question-text">In Oaxaca, it's traditional to use sal de gusano to accompany mezcal. What is sal de gusano?</div>
+        <div class="question-type">Multiple Choice</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q9" value="A" required> <span>Salt blended with toasted and ground agave worms</span></label>
+          <label class="option"><input type="radio" name="q9" value="B"> <span>Smoked sea salt from a secret beach</span></label>
+          <label class="option"><input type="radio" name="q9" value="C"> <span>Pink Himalayan salt mixed with chili powder</span></label>
+          <label class="option"><input type="radio" name="q9" value="D"> <span>Salt infused with cactus flower</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">QUESTION 10</div>
+        <div class="question-text">The cocktail pick evolved from the humble:</div>
+        <div class="question-type">Multiple Choice</div>
+        <div class="options">
+          <label class="option"><input type="radio" name="q10" value="A" required> <span>Toothpick</span></label>
+          <label class="option"><input type="radio" name="q10" value="B"> <span>Lemon zester</span></label>
+          <label class="option"><input type="radio" name="q10" value="C"> <span>Swizzle stick</span></label>
+          <label class="option"><input type="radio" name="q10" value="D"> <span>Straw</span></label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">SUBMIT ANSWERS</button>
+    </form>
+    
+    <div class="decoration">✦ ✦ ✦</div>
+  </div>
+
+  <div id="results" class="content-section">
+    <div id="passwordPrompt" style="text-align: center; padding: 3rem 1rem;">
+      <div style="margin-bottom: 2rem;">
+        <label for="hostPassword" style="display: block; font-size: 14px; margin-bottom: 1rem; color: #999;">Enter host password:</label>
+        <input type="password" id="hostPassword" placeholder="Password" style="padding: 10px; border: 1px solid #d4af37; border-radius: 4px; font-size: 16px; width: 100%; max-width: 200px;">
+      </div>
+      <button onclick="checkPassword()" style="padding: 10px 30px; border: 1px solid #d4af37; background: #d4af37; color: #1a1a1a; border-radius: 4px; font-weight: 600; cursor: pointer;">ENTER</button>
+    </div>
+    <div id="leaderboardView" style="display: none;">
+      <div class="decoration">✦ ✦ ✦</div>
+      <h2 style="font-size: 18px; margin-bottom: 1.5rem;">LEADERBOARD</h2>
+      <div id="leaderboardContent" class="leaderboard"></div>
+      <div class="decoration">✦ ✦ ✦</div>
+    </div>
+  </div>
+</div>
+
+<div id="detailModal" class="modal-overlay">
+  <div class="modal">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <div class="modal-title">Response Details</div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+  const ANSWERS = {
+    q1: 'A', q2: 'A', q3: 'A', q4: 'A', q5: 'A',
+    q6: 'A', q7: 'A', q8: 'A', q9: 'A', q10: 'A'
+  };
+
+  const QUESTIONS = {
+    q1: "The original maraschino cherry comes from:",
+    q2: "Which family lost their cherry business in 1943?",
+    q3: "Harry Yee's Tropical Itch came with what garnish?",
+    q4: "The origin of the Margarita salt rim is:",
+    q5: "Which garnish did Martinis originally have?",
+    q6: "FDR's Dirty Martini gin-to-vermouth ratio was:",
+    q7: "Sherwood Anderson died from a swallowed olive pick",
+    q8: "The Gibson has a clear, agreed-upon origin story",
+    q9: "Sal de gusano is:",
+    q10: "The cocktail pick evolved from the:"
+  };
+
+  const HOST_PASSWORD = 'host';
+
+  function switchMode(mode) {
+    document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.toggle-btn').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById(mode).classList.add('active');
+    event.target.classList.add('active');
+    
+    if (mode === 'results') {
+      document.getElementById('hostPassword').focus();
+    }
+  }
+
+  function checkPassword() {
+    const password = document.getElementById('hostPassword').value;
+    if (password === HOST_PASSWORD) {
+      document.getElementById('passwordPrompt').style.display = 'none';
+      document.getElementById('leaderboardView').style.display = 'block';
+      renderLeaderboard();
+    } else {
+      alert('Wrong password');
+      document.getElementById('hostPassword').value = '';
+      document.getElementById('hostPassword').focus();
+    }
+  }
+
+  document.getElementById('hostPassword').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      checkPassword();
+    }
+  });
+
+  document.getElementById('quizForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('playerName').value.trim();
+    if (!name) {
+      alert('Please enter your name');
+      return;
+    }
+    
+    const answers = {};
+    for (let i = 1; i <= 20; i++) {
+      const q = 'q' + i;
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      if (selected) {
+        answers[q] = selected.value;
+      }
+    }
+    
+    const score = calculateScore(answers);
+    const entry = { name, answers, score, timestamp: Date.now() };
+    
+    let responses = JSON.parse(localStorage.getItem('quizResponses') || '[]');
+    responses.push(entry);
+    localStorage.setItem('quizResponses', JSON.stringify(responses));
+    
+    document.getElementById('quizForm').innerHTML = '<div class="success-message">Thanks ' + name + '! Your answers have been submitted.</div>';
+  });
+
+  function calculateScore(answers) {
+    let correct = 0;
+    for (let i = 1; i <= 10; i++) {
+      const q = 'q' + i;
+      if (answers[q] === ANSWERS[q]) {
+        correct++;
+      }
+    }
+    return correct;
+  }
+
+  function renderLeaderboard() {
+    const responses = JSON.parse(localStorage.getItem('quizResponses') || '[]');
+    
+    if (responses.length === 0) {
+      document.getElementById('leaderboardContent').innerHTML = '<div class="no-responses">No responses yet</div>';
+      return;
+    }
+    
+    const sorted = responses.sort((a, b) => b.score - a.score);
+    
+    let html = '<div class="leaderboard-header"><div>NAME</div><div>SCORE</div><div>%</div></div>';
+    
+    sorted.forEach(r => {
+      const percent = Math.round((r.score / 10) * 100);
+      html += `<div class="leaderboard-row" onclick="showDetails('${r.name}')">
+        <div class="leaderboard-name">${r.name}</div>
+        <div class="leaderboard-score">${r.score} / 10</div>
+        <div class="leaderboard-percent">${percent}%</div>
+      </div>`;
+    });
+    
+    document.getElementById('leaderboardContent').innerHTML = html;
+  }
+
+  function showDetails(name) {
+    const responses = JSON.parse(localStorage.getItem('quizResponses') || '[]');
+    const entry = responses.find(r => r.name === name);
+    
+    if (!entry) return;
+    
+    let html = `<h3 style="font-size: 16px; margin-bottom: 1rem;">${entry.name} — ${entry.score} / 10</h3>`;
+    
+    for (let i = 1; i <= 10; i++) {
+      const q = 'q' + i;
+      const isCorrect = entry.answers[q] === ANSWERS[q];
+      html += `<div class="modal-question">
+        <div class="modal-q-number">QUESTION ${i}</div>
+        <div class="modal-q-text">${QUESTIONS[q]}</div>
+        <div class="modal-answer ${isCorrect ? 'correct' : 'incorrect'}">
+          ${isCorrect ? '✓ Correct' : '✗ Incorrect'} — Answered: <strong>${entry.answers[q]}</strong>
+        </div>
+      </div>`;
+    }
+    
+    document.getElementById('modalContent').innerHTML = html;
+    document.getElementById('detailModal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('detailModal').classList.remove('active');
+  }
+</script>
+
+</body>
+</html>
