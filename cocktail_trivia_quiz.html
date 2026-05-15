@@ -4,55 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Art of the Garnish - Cocktail Trivia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
+
+    body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      color: #1a1a1a;
-      background: #f5f5f5;
+      color: #c8c8c8;
+      background-color: #060606;
+      background-image:
+        repeating-linear-gradient(45deg, transparent 0, transparent 28px, rgba(196, 158, 60, 0.07) 28px, rgba(196, 158, 60, 0.07) 29px),
+        repeating-linear-gradient(-45deg, transparent 0, transparent 28px, rgba(196, 158, 60, 0.07) 28px, rgba(196, 158, 60, 0.07) 29px);
+      min-height: 100vh;
       padding: 1rem;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      body { background: #1a1a1a; color: #f5f5f5; }
-    }
-    
+
     .quiz-container {
       max-width: 680px;
       margin: 0 auto;
-      background: white;
+      background: rgba(10, 10, 10, 0.96);
       border-radius: 8px;
       padding: 2rem 1.5rem;
+      border: 1px solid rgba(196, 158, 60, 0.2);
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .quiz-container { background: #2a2a2a; }
-    }
-    
+
     .header {
       text-align: center;
       margin-bottom: 2rem;
-      border-bottom: 2px solid #d4af37;
+      border-bottom: 2px solid #c49e3c;
       padding-bottom: 1.5rem;
     }
-    
+
     .header h1 {
+      font-family: 'Cinzel', serif;
       font-size: 28px;
-      font-weight: 500;
+      font-weight: 600;
       margin-bottom: 0.5rem;
-      letter-spacing: 2px;
+      letter-spacing: 4px;
+      color: #c49e3c;
     }
-    
+
     .header-subtitle {
-      font-size: 14px;
-      color: #666;
-      letter-spacing: 1px;
+      font-size: 13px;
+      color: #888;
+      letter-spacing: 3px;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .header-subtitle { color: #aaa; }
-    }
-    
+
     .toggle-buttons {
       display: flex;
       gap: 12px;
@@ -60,12 +57,12 @@
       margin-bottom: 2rem;
       flex-wrap: wrap;
     }
-    
+
     .toggle-btn {
       padding: 8px 20px;
-      border: 1px solid #d4af37;
+      border: 1px solid #c49e3c;
       background: transparent;
-      color: inherit;
+      color: #c8c8c8;
       cursor: pointer;
       border-radius: 4px;
       font-size: 13px;
@@ -73,165 +70,149 @@
       transition: all 0.2s;
       letter-spacing: 1px;
     }
-    
+
     .toggle-btn.active {
-      background: #d4af37;
-      color: #1a1a1a;
+      background: #c49e3c;
+      color: #0a0a0a;
     }
-    
+
     .toggle-btn:hover {
-      border-color: #d4af37;
+      border-color: #c49e3c;
+      color: #c49e3c;
     }
-    
+
     .content-section { display: none; }
     .content-section.active { display: block; }
-    
+
     .name-entry {
-      background: #f9f9f9;
+      background: #111;
       padding: 1.5rem;
       border-radius: 8px;
       margin-bottom: 2rem;
-      border: 1px solid #d4af37;
+      border: 1px solid rgba(196, 158, 60, 0.35);
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .name-entry { background: #333; }
-    }
-    
+
     .name-entry label {
       display: block;
       font-size: 13px;
-      color: #666;
+      color: #888;
       letter-spacing: 1px;
       margin-bottom: 0.75rem;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .name-entry label { color: #aaa; }
-    }
-    
+
     .name-entry input {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #ccc;
+      border: 1px solid #333;
       border-radius: 4px;
       font-size: 14px;
-      background: white;
-      color: #1a1a1a;
+      background: #0a0a0a;
+      color: #c8c8c8;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .name-entry input { 
-        background: #1a1a1a; 
-        color: #f5f5f5;
-        border-color: #444;
-      }
+
+    .name-entry input:focus {
+      outline: none;
+      border-color: rgba(196, 158, 60, 0.5);
     }
-    
+
     .question {
       margin-bottom: 2rem;
       padding-bottom: 1.5rem;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #1e1e1e;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .question { border-bottom-color: #333; }
-    }
-    
+
     .question:last-of-type {
       border-bottom: none;
     }
-    
+
     .question-number {
       font-size: 12px;
-      color: #d4af37;
+      color: #c49e3c;
       font-weight: 600;
       letter-spacing: 1px;
       margin-bottom: 0.5rem;
     }
-    
+
     .question-text {
       font-size: 15px;
       font-weight: 500;
       margin-bottom: 1rem;
       line-height: 1.6;
+      color: #d8d8d8;
     }
-    
+
     .question-type {
       font-size: 11px;
-      color: #999;
+      color: #666;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 0.75rem;
     }
-    
+
     .options {
       display: flex;
       flex-direction: column;
       gap: 8px;
       margin-left: 1rem;
     }
-    
+
     .option {
       display: flex;
       align-items: center;
       font-size: 14px;
       cursor: pointer;
       gap: 8px;
+      color: #b8b8b8;
     }
-    
+
     .option input[type="radio"] {
       cursor: pointer;
+      accent-color: #c49e3c;
     }
-    
+
     .submit-btn {
       display: block;
       width: 100%;
       padding: 12px;
       margin-top: 2rem;
-      border: 1px solid #d4af37;
-      background: #d4af37;
-      color: #1a1a1a;
+      border: 1px solid #c49e3c;
+      background: #c49e3c;
+      color: #0a0a0a;
       font-size: 14px;
       font-weight: 600;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       cursor: pointer;
       border-radius: 4px;
       transition: all 0.2s;
     }
-    
+
     .submit-btn:hover {
-      opacity: 0.9;
+      background: #d4ae4c;
+      border-color: #d4ae4c;
     }
-    
+
     .submit-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
     }
-    
+
     .success-message {
-      background: #e8f5e9;
-      color: #2e7d32;
+      background: #0d1f0f;
+      color: #6dbf72;
+      border: 1px solid #2a5c2e;
       padding: 1rem;
       border-radius: 4px;
       text-align: center;
       font-size: 14px;
       margin-top: 2rem;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .success-message {
-        background: #1b5e20;
-        color: #81c784;
-      }
-    }
-    
+
     .leaderboard {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
-    
+
     .leaderboard-header {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
@@ -239,53 +220,50 @@
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 1px;
-      color: #d4af37;
+      color: #c49e3c;
       padding: 12px;
-      border-bottom: 2px solid #d4af37;
+      border-bottom: 2px solid #c49e3c;
     }
-    
+
     .leaderboard-row {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
       gap: 12px;
       padding: 12px;
-      background: #f9f9f9;
+      background: #141414;
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.2s;
+      border: 1px solid transparent;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .leaderboard-row { background: #333; }
-    }
-    
+
     .leaderboard-row:hover {
-      border: 1px solid #d4af37;
+      border-color: #c49e3c;
     }
-    
+
     .leaderboard-name {
       font-weight: 500;
       font-size: 14px;
     }
-    
+
     .leaderboard-score {
       text-align: right;
       font-size: 14px;
     }
-    
+
     .leaderboard-percent {
       text-align: right;
       font-size: 14px;
-      color: #999;
+      color: #666;
     }
-    
+
     .no-responses {
       text-align: center;
       padding: 2rem;
-      color: #999;
+      color: #666;
       font-size: 14px;
     }
-    
+
     .modal-overlay {
       display: none;
       position: fixed;
@@ -293,94 +271,86 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.75);
       justify-content: center;
       align-items: center;
       z-index: 1000;
       padding: 1rem;
     }
-    
+
     .modal-overlay.active {
       display: flex;
     }
-    
+
     .modal {
-      background: white;
+      background: #111;
       border-radius: 8px;
       padding: 2rem;
       max-width: 600px;
       max-height: 80vh;
       overflow-y: auto;
-      border: 1px solid #ddd;
+      border: 1px solid rgba(196, 158, 60, 0.3);
+      color: #c8c8c8;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .modal { 
-        background: #2a2a2a;
-        border-color: #444;
-      }
-    }
-    
+
     .modal-close {
       float: right;
       font-size: 20px;
       cursor: pointer;
-      color: #999;
+      color: #666;
     }
-    
+
+    .modal-close:hover {
+      color: #c49e3c;
+    }
+
     .modal-title {
       font-size: 18px;
       font-weight: 500;
       margin-bottom: 1.5rem;
       clear: both;
+      color: #d8d8d8;
     }
-    
+
     .modal-question {
       margin-bottom: 1.5rem;
     }
-    
+
     .modal-q-number {
       font-size: 12px;
-      color: #d4af37;
+      color: #c49e3c;
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
-    
+
     .modal-q-text {
       font-size: 14px;
       font-weight: 500;
       margin-bottom: 0.75rem;
+      color: #d8d8d8;
     }
-    
+
     .modal-answer {
       font-size: 13px;
-      color: #999;
+      color: #666;
       margin-bottom: 0.25rem;
     }
-    
+
     .modal-answer.correct {
-      color: #2e7d32;
+      color: #6dbf72;
       font-weight: 500;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .modal-answer.correct { color: #81c784; }
-    }
-    
+
     .modal-answer.incorrect {
-      color: #c62828;
+      color: #d05050;
     }
-    
-    @media (prefers-color-scheme: dark) {
-      .modal-answer.incorrect { color: #ef5350; }
-    }
-    
+
     .decoration {
       text-align: center;
       font-size: 20px;
       margin: 2rem 0 1rem;
       letter-spacing: 8px;
-      color: #d4af37;
+      color: #c49e3c;
     }
   </style>
 </head>
@@ -531,10 +501,10 @@
   <div id="results" class="content-section">
     <div id="passwordPrompt" style="text-align: center; padding: 3rem 1rem;">
       <div style="margin-bottom: 2rem;">
-        <label for="hostPassword" style="display: block; font-size: 14px; margin-bottom: 1rem; color: #999;">Enter host password:</label>
-        <input type="password" id="hostPassword" placeholder="Password" style="padding: 10px; border: 1px solid #d4af37; border-radius: 4px; font-size: 16px; width: 100%; max-width: 200px;">
+        <label for="hostPassword" style="display: block; font-size: 14px; margin-bottom: 1rem; color: #888; letter-spacing: 1px;">Enter host password:</label>
+        <input type="password" id="hostPassword" placeholder="Password" style="padding: 10px; border: 1px solid rgba(196,158,60,0.4); border-radius: 4px; font-size: 16px; width: 100%; max-width: 200px; background: #0a0a0a; color: #c8c8c8;">
       </div>
-      <button onclick="checkPassword()" style="padding: 10px 30px; border: 1px solid #d4af37; background: #d4af37; color: #1a1a1a; border-radius: 4px; font-weight: 600; cursor: pointer;">ENTER</button>
+      <button onclick="checkPassword()" style="padding: 10px 30px; border: 1px solid #c49e3c; background: #c49e3c; color: #0a0a0a; border-radius: 4px; font-weight: 600; cursor: pointer; letter-spacing: 2px;">ENTER</button>
     </div>
     <div id="leaderboardView" style="display: none;">
       <div class="decoration">✦ ✦ ✦</div>
